@@ -105,7 +105,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="glass border-t py-8 text-center" style={{ borderColor: 'var(--glass-border)' }}>
-        <p style={{ color: 'var(--text-secondary)' }}>&copy; 2026 JUSTNOTE. Built with React, Node.js & MongoDB.</p>
+        <p style={{ color: 'var(--text-secondary)' }}>&copy; 2026 JUSTNOTE. Made by Just. Built with React, Node.js & MongoDB.</p>
       </footer>
     </div>
   );

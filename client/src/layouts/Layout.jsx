@@ -203,6 +203,11 @@ export default function Layout() {
           </div>
         </div>
 
+        {/* Made by Just */}
+        <div className="px-4 py-2 border-t shrink-0 text-center" style={{ borderColor: 'var(--glass-border)' }}>
+          <p className="text-[10px]" style={{ color: 'var(--text-secondary)' }}>Made by Just</p>
+        </div>
+
         {/* Bottom actions */}
         <div className="p-3 border-t space-y-0.5 shrink-0" style={{ borderColor: 'var(--glass-border)' }}>
           <button
