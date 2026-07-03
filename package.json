@@ -4,6 +4,7 @@
   "description": "Full-stack Notes Application with Authentication",
   "private": true,
   "scripts": {
+    "postinstall": "cd client && npm install && cd ../server && npm install",
     "install:all": "cd server && npm install && cd ../client && npm install",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
