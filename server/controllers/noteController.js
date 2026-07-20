@@ -22,16 +22,17 @@ const getNotes = async (req, res, next) => {
     if (pinned !== undefined) query.pinned = pinned === 'true';
 
     if (search) {
+      const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       query.$or = [
-        { title: { $regex: search, $options: 'i' } },
-        { content: { $regex: search, $options: 'i' } },
-        { tags: { $regex: search, $options: 'i' } },
-        { category: { $regex: search, $options: 'i' } },
+        { title: { $regex: escaped, $options: 'i' } },
+        { content: { $regex: escaped, $options: 'i' } },
+        { tags: { $regex: escaped, $options: 'i' } },
+        { category: { $regex: escaped, $options: 'i' } },
       ];
     }
 
     if (category) {
-      query.category = category;
+      query.category = category === '__none__' ? '' : category;
     }
 
     if (tags) {
@@ -50,10 +51,12 @@ const getNotes = async (req, res, next) => {
 
     const sortObj = sortOptions[sort] || sortOptions['-updatedAt'];
 
-    const skip = (parseInt(page) - 1) * parseInt(limit);
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit) || 20));
+    const skip = (pageNum - 1) * limitNum;
 
     const [notes, total] = await Promise.all([
-      Note.find(query).sort(sortObj).skip(skip).limit(parseInt(limit)),
+      Note.find(query).sort(sortObj).skip(skip).limit(limitNum),
       Note.countDocuments(query),
     ]);
 
@@ -61,10 +64,10 @@ const getNotes = async (req, res, next) => {
       success: true,
       notes,
       pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit),
+        page: pageNum,
+        limit: limitNum,
         total,
-        pages: Math.ceil(total / parseInt(limit)),
+        pages: Math.ceil(total / limitNum),
       },
     });
   } catch (error) {

@@ -35,10 +35,10 @@ export default function Dashboard() {
     try {
       const params = { sort, page: 1, limit: 50 };
       if (search) params.search = search;
-      if (category) params.category = category;
       if (category === 'uncategorized') {
-        delete params.category;
-        params.category = '';
+        params.category = '__none__';
+      } else if (category) {
+        params.category = category;
       }
       const { data } = await notesApi.getAll(params);
       setNotes(data.notes);
@@ -122,6 +122,7 @@ export default function Dashboard() {
     try {
       const { data } = await notesApi.togglePin(id);
       setNotes((prev) => prev.map((n) => (n._id === id ? data.note : n)));
+      fetchStats();
     } catch (err) {
       toast.error(err.message);
     }
